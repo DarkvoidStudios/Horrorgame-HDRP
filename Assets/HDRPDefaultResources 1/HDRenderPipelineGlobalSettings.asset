@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781cc897cf8675041a751163b51f97dd, type: 3}
   m_Name: HDRenderPipelineGlobalSettings
   m_EditorClassIdentifier: 
-  m_DefaultVolumeProfile: {fileID: 11400000, guid: 65aa4077dc49d0a4bb0634173d3219e2, type: 2}
-  m_LookDevVolumeProfile: {fileID: 11400000, guid: 8555550a7b3929e49b9a77ea3331b60d, type: 2}
+  m_DefaultVolumeProfile: {fileID: 11400000, guid: 65aa4077dc49d0a4bb0634173d3219e2,
+    type: 2}
+  m_LookDevVolumeProfile: {fileID: 11400000, guid: 8555550a7b3929e49b9a77ea3331b60d,
+    type: 2}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
       data1: 72198262773251917
@@ -59,7 +61,8 @@ MonoBehaviour:
     sssCustomSampleBudget: 20
     msaaMode: 1
     materialQuality: 0
-  m_RenderPipelineResources: {fileID: 11400000, guid: 3ce144cff5783da45aa5d4fdc2da14b7, type: 2}
+  m_RenderPipelineResources: {fileID: 11400000, guid: 3ce144cff5783da45aa5d4fdc2da14b7,
+    type: 2}
   m_RenderPipelineRayTracingResources: {fileID: 0}
   beforeTransparentCustomPostProcesses: []
   beforePostProcessCustomPostProcesses: []
@@ -84,6 +87,7 @@ MonoBehaviour:
   decalLayerName7: Decal Layer 7
   shaderVariantLogLevel: 0
   lensAttenuationMode: 0
+  colorGradingSpace: 0
   diffusionProfileSettingsList:
   - {fileID: 11400000, guid: 5c31cd3c1ea21074f8a5d4acd3f9ce93, type: 2}
   - {fileID: 11400000, guid: 38411ff22db83f945a08b68efe0178d8, type: 2}

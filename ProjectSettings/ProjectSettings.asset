@@ -885,11 +885,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: 26f73e7b-7bb5-4eae-8177-2e185f5f4e20
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: test
+  organizationId: brok3nmind
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
