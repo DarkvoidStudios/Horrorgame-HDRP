@@ -194,3 +194,208 @@ Received Import Request.
   path: Assets/Videos/StudioIntro.mp4
   artifactKey: Guid(50a40ac0e64b9344a9ec77e47eb316fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Videos/StudioIntro.mp4 using Guid(50a40ac0e64b9344a9ec77e47eb316fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '61f28c76d154ad187c918ca69c146191') in 0.047357 seconds 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.005498 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image D:\Projects\Horrorgame-HDRP\Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file LoadedFromMemory doesn't match image D:\Projects\Horrorgame-HDRP\Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.43 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.735 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1736ms)
+		BeginReloadAssembly (254ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (9ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (65ms)
+		EndReloadAssembly (1324ms)
+			LoadAssemblies (237ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (446ms)
+				TypeCache.Initialize (419ms)
+					TypeCache.ScanAssembly (408ms)
+				ResolveRequiredComponents (27ms)
+			ReleaseScriptCaches (3ms)
+			RebuildScriptCaches (106ms)
+			SetupLoadedEditorAssemblies (525ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (15ms)
+				SetLoadedEditorAssemblies (7ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (100ms)
+				ProcessInitializeOnLoadAttributes (362ms)
+				ProcessInitializeOnLoadMethodAttributes (37ms)
+				AfterProcessingInitializeOnLoad (2ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (8ms)
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 3.67 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 6133 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 142 unused Assets / (11.3 MB). Loaded Objects now: 6642.
+Memory consumption went from 1.03 GB to 1.02 GB.
+Total: 12.347300 ms (FindLiveObjects: 0.707600 ms CreateObjectMapping: 0.616200 ms MarkObjects: 7.784300 ms  DeleteObjects: 3.236900 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 3904.635019 seconds.
+  path: Packages/com.unity.render-pipelines.high-definition/Editor/RenderPipelineResources/DefaultSettingsVolumeProfile.asset
+  artifactKey: Guid(f940a8037e6cda542891dc1aac1fa4e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.render-pipelines.high-definition/Editor/RenderPipelineResources/DefaultSettingsVolumeProfile.asset using Guid(f940a8037e6cda542891dc1aac1fa4e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '07bc81ad7ff6121b6a282bdafab5ae1b') in 0.205795 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000109 seconds.
+  path: Assets/PostProcessing/MainMenu.asset
+  artifactKey: Guid(f1fee9669b6b87245b5bb083d2f27fb6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/MainMenu.asset using Guid(f1fee9669b6b87245b5bb083d2f27fb6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '87d7a7a3bc05f8eb896890afb5ce7b73') in 0.607714 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000043 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/MountainPostProcessingSettings.asset
+  artifactKey: Guid(63e9f1610dac2924c8a3432bb395e9c5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/MountainPostProcessingSettings.asset using Guid(63e9f1610dac2924c8a3432bb395e9c5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc102f8bad114b663318321b71217115') in 0.014278 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000045 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/OverviewPostProcessingSettings.asset
+  artifactKey: Guid(c9f1c69a4024ce04c9fbea483db6ce55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/OverviewPostProcessingSettings.asset using Guid(c9f1c69a4024ce04c9fbea483db6ce55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '183f7b91451835d451571f4f710f1ea1') in 0.004793 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/MounainSkyandFogSettings.asset
+  artifactKey: Guid(3891044ccb823b04fadaa5270ae3c95e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/MounainSkyandFogSettings.asset using Guid(3891044ccb823b04fadaa5270ae3c95e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc5e2ec63462da7bae8cf24c6716cab8') in 0.197512 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.160334 seconds.
+  path: Assets/Imported/NatureManufacture Assets 1/HD Settings/OverviewSkyandFogSettings.asset
+  artifactKey: Guid(89b3c6b03e6f25b4082eae07efae9c2e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets 1/HD Settings/OverviewSkyandFogSettings.asset using Guid(89b3c6b03e6f25b4082eae07efae9c2e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83e41fd817845b960bae2ea5a746a2d0') in 0.081350 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.243310 seconds.
+  path: Assets/Scenes/Mainmenu/Sky and Fog Settings Profile 1.asset
+  artifactKey: Guid(99da8cfecdc3cdf45bf556ed74d8a420) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Mainmenu/Sky and Fog Settings Profile 1.asset using Guid(99da8cfecdc3cdf45bf556ed74d8a420) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '498644ea584c02bbff6df44249f14b13') in 0.006199 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.027571 seconds.
+  path: Packages/com.unity.render-pipelines.high-definition/Editor/SceneTemplates/Indoors/SkyandFogSettingsProfile.asset
+  artifactKey: Guid(f1e2cc38998412b4196e54731593f665) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.render-pipelines.high-definition/Editor/SceneTemplates/Indoors/SkyandFogSettingsProfile.asset using Guid(f1e2cc38998412b4196e54731593f665) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '58f0e4244fb429bb187d4e73b2ae667b') in 0.007587 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.034638 seconds.
+  path: Packages/com.unity.render-pipelines.high-definition/Editor/SceneTemplates/Outdoors/SkyandFogSettingsProfile.asset
+  artifactKey: Guid(274ed3d2d52027d4a96b38fff65dd32e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.render-pipelines.high-definition/Editor/SceneTemplates/Outdoors/SkyandFogSettingsProfile.asset using Guid(274ed3d2d52027d4a96b38fff65dd32e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd8f6c956f3c4fbe3ee326f9d9b03c84b') in 0.004083 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Packages/com.unity.render-pipelines.high-definition/Editor/SceneTemplates/OutdoorsDXR/SkyandFogSettingsProfile.asset
+  artifactKey: Guid(902eabda182d3f24f8feba509c47cebe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.render-pipelines.high-definition/Editor/SceneTemplates/OutdoorsDXR/SkyandFogSettingsProfile.asset using Guid(902eabda182d3f24f8feba509c47cebe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cd74bf28e2d596a38620bbea23da0463') in 0.002535 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 5.271717 seconds.
+  path: Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings.asset
+  artifactKey: Guid(cc49398480dedd74ca12cf93554b0cb5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings.asset using Guid(cc49398480dedd74ca12cf93554b0cb5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fdfc8aad9e95352bdfe4496413faf8cb') in 0.023925 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000062 seconds.
+  path: Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings 1.asset
+  artifactKey: Guid(27af4047049e0834db51ec5f18765aeb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings 1.asset using Guid(27af4047049e0834db51ec5f18765aeb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0bb5e7732efe860684330a95fb90184f') in 0.006378 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 22.355483 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Cloud.asset
+  artifactKey: Guid(576900b757dc2bb42b835d6ba90283b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Cloud.asset using Guid(576900b757dc2bb42b835d6ba90283b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '57d617e17292f1f1faa9ca186cb2e095') in 0.016635 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Fish.asset
+  artifactKey: Guid(127180f36cca13943a0c07f38200ab2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Fish.asset using Guid(127180f36cca13943a0c07f38200ab2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5ddbdac1355213a5ca8c6f7f62789d6c') in 0.006015 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000032 seconds.
+  path: Assets/Imported/NatureManufacture Assets 1/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Heath.asset
+  artifactKey: Guid(34cdd7e01aca2d84d897f4d0eec46665) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets 1/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Heath.asset using Guid(34cdd7e01aca2d84d897f4d0eec46665) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '02f8d90b0d2e51bcc32d037c6186ec56') in 0.002273 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Mountain.asset
+  artifactKey: Guid(3e863aa73acba1e4d8b7e80026a5a4ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Mountain.asset using Guid(3e863aa73acba1e4d8b7e80026a5a4ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '95d0d41c21bee438f2c983dd602ce164') in 0.005138 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.782339 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Trees Mountain.asset
+  artifactKey: Guid(70aafa30c6b72c14783e903d0a166d14) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Skin_NM Foliage Trees Mountain.asset using Guid(70aafa30c6b72c14783e903d0a166d14) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9cd86e132c62c5df1bb0433336802f7c') in 0.007859 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.054039 seconds.
+  path: Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Water_Mountain.asset
+  artifactKey: Guid(f0d53ace3a50e6b4dbc57630f27e7b67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Water_Mountain.asset using Guid(f0d53ace3a50e6b4dbc57630f27e7b67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '64ad8a32c658004d36733f634b59ebd1') in 0.006609 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Imported/NatureManufacture Assets 1/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Water_Mountain.asset
+  artifactKey: Guid(ac7c1069264e4f6408c0cdd4e2b7b709) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets 1/HD Settings/Diffusion Profiles Settings/NM_SSSSettings_Water_Mountain.asset using Guid(ac7c1069264e4f6408c0cdd4e2b7b709) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9abea10576b8b96a25e6cfa366a10bd4') in 0.002687 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 26.514113 seconds.
+  path: Assets/PostProcessing/HDRPDefaultResources/DefaultLookDevProfile.asset
+  artifactKey: Guid(8555550a7b3929e49b9a77ea3331b60d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/HDRPDefaultResources/DefaultLookDevProfile.asset using Guid(8555550a7b3929e49b9a77ea3331b60d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '43ef8216f393283b299994fbcfb111aa') in 0.008700 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 60.754205 seconds.
+  path: Assets/PostProcessing/HDRPDefaultResources/HDRenderPipelineAsset.asset
+  artifactKey: Guid(82fd21c93049fe24dbe5cb4c87b0f793) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/HDRPDefaultResources/HDRenderPipelineAsset.asset using Guid(82fd21c93049fe24dbe5cb4c87b0f793) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '87e528dfcd39ca32035764734e08983e') in 0.028201 seconds 
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 12.37 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 267 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 49 unused Assets / (3.4 MB). Loaded Objects now: 6884.
+Memory consumption went from 287.2 MB to 283.8 MB.
+Total: 25.956300 ms (FindLiveObjects: 0.450500 ms CreateObjectMapping: 0.543500 ms MarkObjects: 24.465100 ms  DeleteObjects: 0.496300 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
