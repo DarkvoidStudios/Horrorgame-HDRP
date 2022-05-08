@@ -450,7 +450,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -522,18 +522,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -551,6 +544,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -564,11 +579,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -1296,7 +1317,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -1323,7 +1344,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -1575,7 +1597,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -1602,7 +1624,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -1901,7 +1924,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -1993,7 +2016,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -2162,7 +2185,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -2224,7 +2247,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -2271,18 +2294,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -2300,6 +2316,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
         
@@ -2310,11 +2348,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -3010,7 +3054,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -3061,7 +3105,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -3088,7 +3132,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -3340,7 +3385,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -3367,7 +3412,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -3675,7 +3721,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -3767,7 +3813,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -3936,7 +3982,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -3998,7 +4044,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -4048,18 +4094,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -4077,6 +4116,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -4090,11 +4151,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -4790,7 +4857,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -4841,7 +4908,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -4868,7 +4935,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -5120,7 +5188,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -5147,7 +5215,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -5455,7 +5524,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -5547,7 +5616,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -5716,7 +5785,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -5778,7 +5847,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -5828,18 +5897,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -5857,6 +5919,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -5870,11 +5954,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -6593,7 +6683,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -6644,7 +6734,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -6671,7 +6761,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -6923,7 +7014,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -6950,7 +7041,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -7258,7 +7350,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -7350,7 +7442,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -7519,7 +7611,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -7581,7 +7673,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -7631,18 +7723,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -7660,6 +7745,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -7673,11 +7780,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -8382,7 +8495,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -8486,7 +8599,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -8513,7 +8626,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -8889,7 +9003,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -8916,7 +9030,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -9043,7 +9158,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -9226,7 +9341,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -9307,18 +9422,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -9336,6 +9444,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -9349,11 +9479,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -10041,7 +10177,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -10092,7 +10228,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -10119,7 +10255,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -10371,7 +10508,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -10398,7 +10535,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -10706,7 +10844,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -10798,7 +10936,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -10967,7 +11105,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -11029,7 +11167,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -11079,18 +11217,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -11108,6 +11239,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -11121,11 +11274,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -11831,7 +11990,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -11882,7 +12041,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -11909,7 +12068,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -12161,7 +12321,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -12188,7 +12348,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -12496,7 +12657,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -12588,7 +12749,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -12757,7 +12918,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -12819,7 +12980,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -12869,18 +13030,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -12898,6 +13052,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -12911,11 +13087,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -13644,7 +13826,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -13695,7 +13877,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -13722,7 +13904,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -13974,7 +14157,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -14001,7 +14184,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -14310,7 +14494,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -14402,7 +14586,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -14571,7 +14755,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -14633,7 +14817,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -14686,18 +14870,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -14715,6 +14892,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -14728,11 +14927,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -15070,7 +15275,8 @@
         Blend [_SrcBlend] [_DstBlend], [_AlphaSrcBlend] [_AlphaDstBlend]
         ZTest [_ZTestDepthEqualForOpaque]
         ZWrite [_ZWrite]
-        ColorMask [_ColorMaskTransparentVel] 1
+        ColorMask [_ColorMaskTransparentVelOne] 1
+        ColorMask [_ColorMaskTransparentVelTwo] 2
         Stencil
         {
         WriteMask [_StencilWriteMask]
@@ -15474,7 +15680,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -15525,7 +15731,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -15552,7 +15758,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -15804,7 +16011,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -15831,7 +16038,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -16140,7 +16348,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -16232,7 +16440,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -16401,7 +16609,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -16463,7 +16671,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -16516,18 +16724,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -16545,6 +16746,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -16558,11 +16781,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -17257,7 +17486,7 @@
             // Graph Functions
             
         void AddPragma_float(float3 A, out float3 Out){
-        #pragma instancing_options renderinglayer procedural:setupVSPro
+        #pragma instancing_options procedural:setupVSPro
         Out = A;
         }
         
@@ -17308,7 +17537,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -17335,7 +17564,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -17587,7 +17817,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -17614,7 +17844,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -17922,7 +18153,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -18014,7 +18245,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -18183,7 +18414,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -18245,7 +18476,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -18295,18 +18526,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -18324,6 +18548,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -18337,11 +18583,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -19014,7 +19266,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -19041,7 +19293,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -19293,7 +19546,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -19320,7 +19573,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -19611,7 +19865,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -19703,7 +19957,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -19872,7 +20126,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -19934,7 +20188,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -20578,7 +20832,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -20605,7 +20859,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -20857,7 +21112,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -20884,7 +21139,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -21175,7 +21431,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -21267,7 +21523,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -21436,7 +21692,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -21498,7 +21754,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -22156,7 +22412,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -22183,7 +22439,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -22435,7 +22692,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -22462,7 +22719,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -22753,7 +23011,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -22845,7 +23103,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -23014,7 +23272,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -23076,7 +23334,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -23732,7 +23990,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -23759,7 +24017,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -24011,7 +24270,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -24038,7 +24297,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -24329,7 +24589,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -24421,7 +24681,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -24590,7 +24850,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -24652,7 +24912,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);
@@ -25303,7 +25563,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
+        void SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_2EBA7A3B, float Boolean_7ABB9909, UnitySamplerState _SamplerState, Bindings_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float IN, out float4 XZ_2)
         {
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
         float _Property_30834f691775a0898a45b1c868520436_Out_0 = Boolean_7ABB9909;
@@ -25330,7 +25590,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_16c15d3bbdd14b85bd48e3a6cb318af7_Out_0, _Vector2_f8d75f54e7705083bbec539a60185577_Out_0, _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3);
         float2 _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3;
         Unity_Branch_float2(_Property_30834f691775a0898a45b1c868520436_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_d91e2d25acd34686b562b7fe7e9d1d27_Out_3, _Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
+        UnitySamplerState _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_e8746b9475c94530ba35ba8019ad2ae0_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_8e5a4e8f4d52fc8aadd1f46485afc933_Out_3));
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_B_6 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.b;
@@ -25582,7 +25843,7 @@
         half4 uv0;
         };
         
-        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
+        void SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(UnityTexture2D Texture2D_80A3D28F, float4 Vector4_82674548, float Boolean_9FF42DF6, UnitySamplerState _SamplerState, Bindings_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float IN, out float4 XZ_2)
         {
         float _Property_1ef12cf3201a938993fe6a7951b0e754_Out_0 = Boolean_9FF42DF6;
         UnityTexture2D _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0 = Texture2D_80A3D28F;
@@ -25609,7 +25870,8 @@
         Unity_TilingAndOffset_float(IN.uv0.xy, _Vector2_6845d21872714d889783b0cb707df3e9_Out_0, _Vector2_e2e2263627c6098e96a5b5d29350ad03_Out_0, _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3);
         float2 _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3;
         Unity_Branch_float2(_Property_1ef12cf3201a938993fe6a7951b0e754_Out_0, (_Multiply_14cec4902d0a00829e4555071a1b8ad1_Out_2.xy), _TilingAndOffset_17582d056c0b8a8dab1017d37497fe59_Out_3, _Branch_1e152f3aac57448f8518bf2852c000c3_Out_3);
-        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
+        UnitySamplerState _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0 = _SamplerState;
+        float4 _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0 = SAMPLE_TEXTURE2D(_Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.tex, _Property_69f1ed7efd1b494e91f626b88ab2363c_Out_0.samplerstate, _Property_3e01b4d2fc68d48ba3acbba9d5881e59_Out_0.GetTransformedUV(_Branch_1e152f3aac57448f8518bf2852c000c3_Out_3));
         _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0);
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_R_4 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.r;
         float _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_G_5 = _SampleTexture2D_35ddc0da4b30e48b83ca2d39af2aba2c_RGBA_0.g;
@@ -25900,7 +26162,7 @@
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae.uv0 = IN.uv0;
             float4 _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_05d49814100eb3808cd61a6177622291_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae, _PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2);
             float4 _Property_03a155c84233b98dbb11cd710d6e1539_Out_0 = _BaseColor;
             float4 _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_0403eed8a6bea082a4e8fd2d11ab36ae_XZ_2, _Property_03a155c84233b98dbb11cd710d6e1539_Out_0, _Multiply_9cb5181459454189b39d6838c2a6fb85_Out_2);
@@ -25992,7 +26254,7 @@
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNMn_126f337c769a878bb33ea56bcab1d637.uv0 = IN.uv0;
             float4 _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2;
-            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
+            SG_PlanarNMn_1b93a87456f9d4c419321d0cd92bd6c8_float(_Property_2e4a88374e8ffd8db37352d79f10740a_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNMn_126f337c769a878bb33ea56bcab1d637, _PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2);
             float _Property_ea100595101f088a94e70278a910a34c_Out_0 = _BaseNormalScale;
             float3 _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2;
             Unity_NormalStrength_float((_PlanarNMn_126f337c769a878bb33ea56bcab1d637_XZ_2.xyz), _Property_ea100595101f088a94e70278a910a34c_Out_0, _NormalStrength_70f3e500f60967898e02d8fc8200db59_Out_2);
@@ -26161,7 +26423,7 @@
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_473741cc1ef44c87bb090c6f2487c368.uv0 = IN.uv0;
             float4 _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_3876d08547d6ec8797d20cbe2c48586d_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_473741cc1ef44c87bb090c6f2487c368, _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2);
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_R_1 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[0];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_G_2 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[1];
             float _Split_7fe5eb12669d4c8a8c20f31f338c8397_B_3 = _PlanarNM_473741cc1ef44c87bb090c6f2487c368_XZ_2[2];
@@ -26223,7 +26485,7 @@
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.AbsoluteWorldSpacePosition = IN.AbsoluteWorldSpacePosition;
             _PlanarNM_7321d3d8d8279283b0f8041479552f82.uv0 = IN.uv0;
             float4 _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2;
-            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
+            SG_PlanarNM_c0f081da9c567704ea36e7dd38cedcf6_float(_Property_236b33a2310fc7888eaed4f6d882a744_Out_0, _Property_e21be9beec8d858fa2818b2fddc4577c_Out_0, _Property_1b1963c0ccb4d78fa3474b362fd31d15_Out_0, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat), _PlanarNM_7321d3d8d8279283b0f8041479552f82, _PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2);
             float4 _Property_202244b3f3656b87851a6e6ec3283adb_Out_0 = _SpecularColor;
             float4 _Multiply_5616ec15048649889a98f2e2621725b2_Out_2;
             Unity_Multiply_float4_float4(_PlanarNM_7321d3d8d8279283b0f8041479552f82_XZ_2, _Property_202244b3f3656b87851a6e6ec3283adb_Out_0, _Multiply_5616ec15048649889a98f2e2621725b2_Out_2);

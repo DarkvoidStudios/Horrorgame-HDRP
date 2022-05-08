@@ -47,7 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>2.0.14</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorVersion>2.0.15</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2022.1.0b16</UnityVersion>
@@ -64,69 +64,35 @@
     <Compile Include="Assets\Imported\NatureManufacture Assets\NatureManufacture Wind\NM_Wind.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Slider\MasterVolumeSlider.cs" />
     <Compile Include="Assets\Imported\NatureManufacture Assets\Mountain Environment\Particles\Scripts\ParticleCollision.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\UI\Events\TimedEvent.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Slider\VolumeSlider.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\Scripts\Controller\Intro\UIIntroController.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\Sounds\HoverAndClickSoundcontroller.cs" />
     <Compile Include="Assets\Scripts\MapReferrings\Object Rotations\RotateObject.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\GeneratePathExample.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Panel\Settingspanels\SettingsPanel.cs" />
     <Compile Include="Assets\Scripts\Models\Steam\SteamPlayer.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\Controller\KickScreen\UIKickScreenController.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\PathSceneTool.cs" />
     <Compile Include="Assets\Scripts\UI\Events\PressKeyEvent.cs" />
     <Compile Include="Assets\Scripts\Controller\Language\LanguageController.cs" />
     <Compile Include="Assets\Scripts\Controller\CheckGame\UICheckGameController.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\Scripts\Sounds\SoundManager.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\PathSpawner.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Dropdown\Language\LanguageDropDown.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\Scripts\Manager\Animations\WaitForAnimationTrigger.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\Scripts\Manager\Controls\ControlsController.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Text\TextManager.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\PopupWindow\ExitManager.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Dropdown\Resolution\ResolutionDropdown.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Slider\ResolutionSlider.cs" />
     <Compile Include="Assets\Scripts\Manager\GameCheck\CheckGameManager.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\PathPlacer.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\UI\Events\HoldKeyEvent.cs" />
     <Compile Include="Assets\Scripts\Controller\Language\NewBehaviourScript.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\Scripts\UI\Events\PointerEnterEvents.cs" />
     <Compile Include="Assets\Scripts\Externals\Steamworks.NET\SteamManager.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\PathFollower.cs" />
-    <Compile Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Dropdown\RefreshRate\RefreshRateDropdown.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\RoadMeshCreator.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Panel\PanelManager.cs" />
@@ -144,9 +110,7 @@
     <None Include="Assets\Imported\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Imported\NatureManufacture Assets\Object Shaders\NM_Lit_Full_Triplanar_Cover_CutOut.shader" />
     <None Include="Assets\Imported\NatureManufacture Assets\Object Shaders\NM_Lit_Top_Cover_CutOut.shader" />
-    <None Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\Imported\NatureManufacture Assets\Mountain Environment\HD and URP Support Packs\About SRP import.txt" />
-    <None Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\Imported\NatureManufacture Assets\Foliage Shaders\NM_indirect.cginc" />
     <None Include="Assets\Imported\NatureManufacture Assets\Foliage Shaders\Advanced Grass Standard.shader" />
     <None Include="Assets\Imported\NatureManufacture Assets\Mountain Environment\HD and URP Support Packs\README - 12.1 HD RP Mountain IMPORT.txt" />
@@ -160,6 +124,7 @@
     <None Include="Assets\Imported\NatureManufacture Assets\Foliage Shaders\NM_Particles.shader" />
     <None Include="Assets\Imported\NatureManufacture Assets\Mountain Environment\HD and URP Support Packs\README -12.1 URP RP Mountain IMPORT AND TIPS.txt" />
     <None Include="Assets\Imported\NatureManufacture Assets\Object Shaders\NM_Layered_Triplanar_Top_Cover_CutOut.shader" />
+    <None Include="Assets\Imported\NatureManufacture Assets\Mountain Environment\README - Mountain content and setup.txt" />
     <None Include="Assets\Imported\NatureManufacture Assets\Foliage Shaders\NM_Foliage_VSPro_Indirect.cginc" />
     <None Include="Assets\Imported\NatureManufacture Assets\Object Shaders\NM_Lit_Full_Triplanar_Cover.shader" />
     <None Include="Assets\Imported\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
@@ -209,7 +174,6 @@
     <None Include="Assets\Imported\NatureManufacture Assets\Mountain Environment\R.A.M Non Tesseled trial\Shaders\Water River Offset Vertex Color Flow.shader" />
     <None Include="Assets\Imported\NatureManufacture Assets\Foliage Shaders\NM_Foliage_Snow.shader" />
     <None Include="Assets\Imported\TextMesh Pro\Shaders\TMP_Sprite.shader" />
-    <None Include="Assets\Imported\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -474,7 +438,7 @@
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="ReportGeneratorMerged">
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.1.1\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
@@ -859,10 +823,6 @@
       <Project>{0F4BEA74-FF73-9AA4-281A-2169B9B2B8C8}</Project>
       <Name>Unity.VSCode.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="HDRPSamples.csproj">
-      <Project>{0514E523-318B-B859-F054-13E714F10F90}</Project>
-      <Name>HDRPSamples</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
       <Project>{DE1ACF79-E02B-5C83-72FF-5F6E8AD5BE66}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
@@ -934,10 +894,6 @@
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{AA9540FF-7908-682F-4805-3D391839F5D8}</Project>
       <Name>UnityEditor.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{D6C874F4-5121-35B3-7980-5C9825F23CAC}</Project>
-      <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Rider.Editor.csproj">
       <Project>{5EEACB44-5DA6-8779-986A-A6BBA145F754}</Project>
@@ -1018,6 +974,18 @@
     <ProjectReference Include="Unity.VisualScripting.State.csproj">
       <Project>{7DB365BD-6804-FB68-9670-78DF0AF36B66}</Project>
       <Name>Unity.VisualScripting.State</Name>
+    </ProjectReference>
+    <ProjectReference Include="HDRPSamples.csproj">
+      <Project>{0514E523-318B-B859-F054-13E714F10F90}</Project>
+      <Name>HDRPSamples</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Polybrush.Editor.csproj">
+      <Project>{D230A48F-BE9B-265C-F719-C74023DFDEEE}</Project>
+      <Name>Unity.Polybrush.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Polybrush.csproj">
+      <Project>{EC780A67-B82E-3427-AEAA-DB43C381CCB0}</Project>
+      <Name>Unity.Polybrush</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

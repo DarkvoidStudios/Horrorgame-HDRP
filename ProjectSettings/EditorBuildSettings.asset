@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Mainmenu.unity
     guid: f7cfcff5ab9758b43855ef32fb7bf347
   - enabled: 1
-    path: Assets/Maps/Mountains Mainmenu.unity
-    guid: 4549f65a4950a6b4786e8bc522fcaa5c
-  - enabled: 1
     path: Assets/Scenes/KickScreen.unity
     guid: b3b8fc9b9e1f7054d9ed7f28c9c07e43
   m_configObjects: {}

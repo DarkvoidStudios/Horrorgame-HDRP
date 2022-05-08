@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "b0844df8-e6ee-04f3-23fd-5cf408ecf16d": {
+      "ProjectGuid": "b0844df8-e6ee-04f3-23fd-5cf408ecf16d",
+      "DisplayName": "Unity.RenderPipelines.Core.Editor",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

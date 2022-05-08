@@ -982,10 +982,6 @@
       <Project>{0F4BEA74-FF73-9AA4-281A-2169B9B2B8C8}</Project>
       <Name>Unity.VSCode.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="HDRPSamples.csproj">
-      <Project>{0514E523-318B-B859-F054-13E714F10F90}</Project>
-      <Name>HDRPSamples</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
       <Project>{DE1ACF79-E02B-5C83-72FF-5F6E8AD5BE66}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
@@ -1141,6 +1137,10 @@
     <ProjectReference Include="Unity.VisualScripting.State.csproj">
       <Project>{7DB365BD-6804-FB68-9670-78DF0AF36B66}</Project>
       <Name>Unity.VisualScripting.State</Name>
+    </ProjectReference>
+    <ProjectReference Include="HDRPSamples.csproj">
+      <Project>{0514E523-318B-B859-F054-13E714F10F90}</Project>
+      <Name>HDRPSamples</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

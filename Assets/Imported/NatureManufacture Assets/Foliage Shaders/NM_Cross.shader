@@ -295,6 +295,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -1102,18 +1103,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -1132,6 +1126,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -1145,11 +1161,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -1667,6 +1689,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -1949,7 +1972,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -1959,7 +1982,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -1999,18 +2022,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -2028,6 +2044,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
         
@@ -2038,11 +2076,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -2572,6 +2616,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -3453,7 +3498,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -3463,7 +3508,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -3512,18 +3557,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -3542,6 +3580,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -3555,11 +3615,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -4086,6 +4152,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -4962,7 +5029,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -4972,7 +5039,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -5021,18 +5088,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -5051,6 +5111,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -5064,11 +5146,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -5611,6 +5699,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -6504,7 +6593,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -6514,7 +6603,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -6563,18 +6652,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -6593,6 +6675,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -6606,11 +6710,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -7147,6 +7257,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -7935,7 +8046,7 @@
             float _SampleTexture2D_91f1784012cdb683a2ab7a12fc14c94d_A_7 = _SampleTexture2D_91f1784012cdb683a2ab7a12fc14c94d_RGBA_0.a;
             float _Property_067d68a770a25e8f978ca090306a96d8_Out_0 = _AlphaCutoff;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -7980,18 +8091,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -8010,6 +8114,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -8023,11 +8149,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -8547,6 +8679,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -9420,7 +9553,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -9430,7 +9563,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -9479,18 +9612,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -9509,6 +9635,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -9522,11 +9670,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -10066,6 +10220,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -10949,7 +11104,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -10959,7 +11114,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -11008,18 +11163,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -11038,6 +11186,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -11051,11 +11221,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -11607,6 +11783,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -12501,7 +12678,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -12511,7 +12688,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -12563,18 +12740,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -12593,6 +12763,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -12606,11 +12798,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -12944,7 +13142,8 @@
         Blend [_SrcBlend] [_DstBlend], [_AlphaSrcBlend] [_AlphaDstBlend]
         ZTest [_ZTestDepthEqualForOpaque]
         ZWrite [_ZWrite]
-        ColorMask [_ColorMaskTransparentVel] 1
+        ColorMask [_ColorMaskTransparentVelOne] 1
+        ColorMask [_ColorMaskTransparentVelTwo] 2
         Stencil
         {
         WriteMask [_StencilWriteMask]
@@ -13172,6 +13371,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -14069,7 +14269,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -14079,7 +14279,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -14131,18 +14331,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -14161,6 +14354,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -14174,11 +14389,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -14705,6 +14926,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -15580,7 +15802,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -15590,7 +15812,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -15639,18 +15861,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -15669,6 +15884,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -15682,11 +15919,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -16224,6 +16467,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -16430,7 +16674,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -16440,7 +16684,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -16944,6 +17188,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -17147,7 +17392,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -17157,7 +17402,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -17676,6 +17921,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -17882,7 +18128,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -17892,7 +18138,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -18410,6 +18656,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -18614,7 +18861,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -18624,7 +18871,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;
@@ -19136,6 +19383,7 @@
         
         // Object and Global properties
         SAMPLER(SamplerState_Linear_Repeat);
+        SAMPLER(SamplerState_Linear_Repeat_Aniso8);
         TEXTURE2D(_BaseColorMap);
         SAMPLER(sampler_BaseColorMap);
         TEXTURE2D(_NormalMap);
@@ -19341,7 +19589,7 @@
             float _Property_0edea7916ed7a189a62b0faf2c274601_Out_0 = _SmoothnessRemapMax;
             float _Property_48e1c5285b48c78e8af19e38f4bd77f9_Out_0 = _AORemapMax;
             UnityTexture2D _Property_147b07430832c98eb0a470557ee61c5e_Out_0 = UnityBuildTexture2DStructNoScale(_NormalMap);
-            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0 = SAMPLE_TEXTURE2D(_Property_147b07430832c98eb0a470557ee61c5e_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_147b07430832c98eb0a470557ee61c5e_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.rgb = UnpackNormal(_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0);
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_R_4 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.r;
             float _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_G_5 = _SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.g;
@@ -19351,7 +19599,7 @@
             float3 _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2;
             Unity_NormalStrength_float((_SampleTexture2D_3a56330a29e2f58a96a29a2135b19cbc_RGBA_0.xyz), _Property_72e436a108ad64868e46d548c585c5f3_Out_0, _NormalStrength_366affc5c8b42482a633d201ef52b9d6_Out_2);
             UnityTexture2D _Property_993f47501beb8286b10e988cd4c7e220_Out_0 = UnityBuildTexture2DStructNoScale(_ThicknessMap);
-            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
+            float4 _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0 = SAMPLE_TEXTURE2D(_Property_993f47501beb8286b10e988cd4c7e220_Out_0.tex, UnityBuildSamplerStateStruct(SamplerState_Linear_Repeat_Aniso8).samplerstate, _Property_993f47501beb8286b10e988cd4c7e220_Out_0.GetTransformedUV(_TilingAndOffset_a2e0bda8e800d280b7064fc016a7e6cd_Out_3));
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_R_4 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.r;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_G_5 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.g;
             float _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_B_6 = _SampleTexture2D_d39fcf91fd1cab8c8ced62e9568e9bc4_RGBA_0.b;

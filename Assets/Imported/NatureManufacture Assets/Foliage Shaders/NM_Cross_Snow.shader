@@ -1126,18 +1126,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -1156,6 +1149,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -1169,11 +1184,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -2195,18 +2216,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -2224,6 +2238,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
         
@@ -2234,11 +2270,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -3829,18 +3871,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -3859,6 +3894,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -3872,11 +3929,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -5467,18 +5530,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -5497,6 +5553,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -5510,11 +5588,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -7130,18 +7214,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -7160,6 +7237,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -7173,11 +7272,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -8663,18 +8768,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -8693,6 +8791,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -8706,11 +8826,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -10291,18 +10417,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -10321,6 +10440,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -10334,11 +10475,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -11941,18 +12088,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -11971,6 +12111,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -11984,11 +12146,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -13616,18 +13784,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -13646,6 +13807,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -13659,11 +13842,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -13998,7 +14187,8 @@
         Blend [_SrcBlend] [_DstBlend], [_AlphaSrcBlend] [_AlphaDstBlend]
         ZTest [_ZTestDepthEqualForOpaque]
         ZWrite [_ZWrite]
-        ColorMask [_ColorMaskTransparentVel] 1
+        ColorMask [_ColorMaskTransparentVelOne] 1
+        ColorMask [_ColorMaskTransparentVelTwo] 2
         Stencil
         {
         WriteMask [_StencilWriteMask]
@@ -15304,18 +15494,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -15334,6 +15517,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -15347,11 +15552,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
@@ -16941,18 +17152,11 @@
             return output;
         }
         
-        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
-        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
-            #ifdef TESSELLATION_ON
-            , inout VaryingsMeshToDS varyings
-            #else
-            , inout VaryingsMeshToPS varyings
-            #endif
-        #endif
+        VertexDescription GetVertexDescription(AttributesMesh input, float3 timeParameters
         #ifdef HAVE_VFX_MODIFICATION
-                , AttributesElement element
+            , AttributesElement element
         #endif
-            )
+        )
         {
             // build graph inputs
             VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
@@ -16971,6 +17175,28 @@
         #else
             VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
         #endif
+            return vertexDescription;
+        
+        }
+        
+        AttributesMesh ApplyMeshModification(AttributesMesh input, float3 timeParameters
+        #ifdef USE_CUSTOMINTERP_SUBSTRUCT
+            #ifdef TESSELLATION_ON
+            , inout VaryingsMeshToDS varyings
+            #else
+            , inout VaryingsMeshToPS varyings
+            #endif
+        #endif
+        #ifdef HAVE_VFX_MODIFICATION
+                , AttributesElement element
+        #endif
+            )
+        {
+            VertexDescription vertexDescription = GetVertexDescription(input, timeParameters
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
         
             // copy graph output to the results
             input.positionOS = vertexDescription.Position;
@@ -16984,11 +17210,17 @@
         
         #if defined(_ADD_CUSTOM_VELOCITY) // For shader graph custom velocity
         // Return precomputed Velocity in object space
-        float3 GetCustomVelocity(AttributesMesh input)
+        float3 GetCustomVelocity(AttributesMesh input
+        #ifdef HAVE_VFX_MODIFICATION
+            , AttributesElement element
+        #endif
+        )
         {
-            // build graph inputs
-            VertexDescriptionInputs vertexDescriptionInputs = AttributesMeshToVertexDescriptionInputs(input);
-            VertexDescription vertexDescription = VertexDescriptionFunction(vertexDescriptionInputs);
+            VertexDescription vertexDescription = GetVertexDescription(input, _TimeParameters.xyz
+        #ifdef HAVE_VFX_MODIFICATION
+                , element
+        #endif
+            );
             return vertexDescription.CustomVelocity;
         }
         #endif
