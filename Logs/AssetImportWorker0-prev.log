@@ -15,7 +15,7 @@ D:/Projects/Horrorgame-HDRP
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-55678
+62671
 Successfully changed project path to: D:/Projects/Horrorgame-HDRP
 D:/Projects/Horrorgame-HDRP
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -47,7 +47,7 @@ D:/Projects/Horrorgame-HDRP
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 193.20 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 157.81 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.1.0b16 (098023fe5c31)
 [Subsystems] Discovering subsystems at path D:/Unity/Unity Hub/2022.1.0b16/Editor/Data/Resources/UnitySubsystems
@@ -63,45 +63,426 @@ Initialize mono
 Mono path[0] = 'D:/Unity/Unity Hub/2022.1.0b16/Editor/Data/Managed'
 Mono path[1] = 'D:/Unity/Unity Hub/2022.1.0b16/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Unity/Unity Hub/2022.1.0b16/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56784
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56200
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Unity/Unity Hub/2022.1.0b16/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.098651 seconds.
+Registered in 0.001814 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 145.99 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 168.82 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  4.214 seconds
+- Completed reload, in  0.907 seconds
 Domain Reload Profiling:
-	ReloadAssembly (4215ms)
-		BeginReloadAssembly (2983ms)
+	ReloadAssembly (908ms)
+		BeginReloadAssembly (150ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (817ms)
-			LoadAssemblies (2982ms)
+		EndReloadAssembly (640ms)
+			LoadAssemblies (149ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (389ms)
-				TypeCache.Initialize (389ms)
-					TypeCache.ScanAssembly (388ms)
-				ResolveRequiredComponents (0ms)
+			SetupTypeCache (164ms)
+				TypeCache.Initialize (163ms)
+					TypeCache.ScanAssembly (160ms)
+				ResolveRequiredComponents (2ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (26ms)
-			SetupLoadedEditorAssemblies (351ms)
+			RebuildScriptCaches (29ms)
+			SetupLoadedEditorAssemblies (381ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (5ms)
+				InitializePlatformSupportModulesInManaged (6ms)
 				SetLoadedEditorAssemblies (6ms)
-				RefreshPlugins (146ms)
+				RefreshPlugins (169ms)
 				BeforeProcessingInitializeOnLoad (1ms)
-				ProcessInitializeOnLoadAttributes (121ms)
-				ProcessInitializeOnLoadMethodAttributes (72ms)
+				ProcessInitializeOnLoadAttributes (142ms)
+				ProcessInitializeOnLoadMethodAttributes (56ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.004835 seconds.
+Registered in 0.004098 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image D:\Projects\Horrorgame-HDRP\Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image D:\Projects\Horrorgame-HDRP\Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 160.55 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.572 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1573ms)
+		BeginReloadAssembly (124ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (6ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (20ms)
+		EndReloadAssembly (1340ms)
+			LoadAssemblies (112ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (336ms)
+				TypeCache.Initialize (322ms)
+					TypeCache.ScanAssembly (316ms)
+				ResolveRequiredComponents (14ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (92ms)
+			SetupLoadedEditorAssemblies (758ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (5ms)
+				RefreshPlugins (161ms)
+				BeforeProcessingInitializeOnLoad (119ms)
+				ProcessInitializeOnLoadAttributes (322ms)
+				ProcessInitializeOnLoadMethodAttributes (146ms)
+				AfterProcessingInitializeOnLoad (2ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (7ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
+Refreshing native plugins compatible for Editor in 1.32 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5981 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 48 unused Assets / (3.5 MB). Loaded Objects now: 6447.
+Memory consumption went from 1.11 GB to 1.11 GB.
+Total: 4.807200 ms (FindLiveObjects: 0.622900 ms CreateObjectMapping: 0.698600 ms MarkObjects: 2.518800 ms  DeleteObjects: 0.965200 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1185423.364734 seconds.
+  path: Assets/PostProcessing/Lens Flare Samples/SampleScene/VolumeProfiles/Indoor.asset
+  artifactKey: Guid(73035aac6ba8da34fb988a2317b4e301) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/Lens Flare Samples/SampleScene/VolumeProfiles/Indoor.asset using Guid(73035aac6ba8da34fb988a2317b4e301) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '34cc19c6dfa92ebfd06c0c90cbf22886') in 0.054685 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000062 seconds.
+  path: Assets/PostProcessing/Lens Flare Samples/SampleScene/VolumeProfiles/HDRiSky.asset
+  artifactKey: Guid(cde6fb4e6605276409f95d2aed878e67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/Lens Flare Samples/SampleScene/VolumeProfiles/HDRiSky.asset using Guid(cde6fb4e6605276409f95d2aed878e67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b7e88a850735408f4f45999aa7638cc7') in 0.017839 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 158.508710 seconds.
+  path: Assets/PostProcessing/DiffusionProfiles/Skin.asset
+  artifactKey: Guid(26bdddf49760c61438938733f07fa2a2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/DiffusionProfiles/Skin.asset using Guid(26bdddf49760c61438938733f07fa2a2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '15dace38c838410928a6a4091e876ab6') in 0.006233 seconds 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.006294 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image D:\Projects\Horrorgame-HDRP\Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image D:\Projects\Horrorgame-HDRP\Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.97 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.119 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1120ms)
+		BeginReloadAssembly (146ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (38ms)
+		EndReloadAssembly (872ms)
+			LoadAssemblies (103ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (317ms)
+				TypeCache.Initialize (304ms)
+					TypeCache.ScanAssembly (298ms)
+				ResolveRequiredComponents (13ms)
+			ReleaseScriptCaches (2ms)
+			RebuildScriptCaches (58ms)
+			SetupLoadedEditorAssemblies (322ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (10ms)
+				SetLoadedEditorAssemblies (5ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (75ms)
+				ProcessInitializeOnLoadAttributes (204ms)
+				ProcessInitializeOnLoadMethodAttributes (25ms)
+				AfterProcessingInitializeOnLoad (2ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (13ms)
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 2.69 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5594 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 41 unused Assets / (3.5 MB). Loaded Objects now: 6451.
+Memory consumption went from 1.04 GB to 1.04 GB.
+Total: 3.629800 ms (FindLiveObjects: 0.513600 ms CreateObjectMapping: 0.408300 ms MarkObjects: 2.187300 ms  DeleteObjects: 0.519800 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1001.343733 seconds.
+  path: Assets/PostProcessing/Lens Flare Samples/Textures/Gradient.png
+  artifactKey: Guid(af1af92286e00d84fa6eebe7e6201c67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/Lens Flare Samples/Textures/Gradient.png using Guid(af1af92286e00d84fa6eebe7e6201c67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '468ac56925c207fc1380fa9e6ffbee05') in 0.093291 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000031 seconds.
+  path: Assets/Images/Highlight/Gradient Top.png
+  artifactKey: Guid(75fa4a67e7c28614a9f0ba6b8b5b4720) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Images/Highlight/Gradient Top.png using Guid(75fa4a67e7c28614a9f0ba6b8b5b4720) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9d75371671c6173f29fc77a8aa3d0bd4') in 0.058336 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_01_3.fbx
+  artifactKey: Guid(f438cd14c558dee4b87327d10561cde9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_01_3.fbx using Guid(f438cd14c558dee4b87327d10561cde9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7e44c25ac0bb337d3dd7fa98ff978f36') in 1.716094 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000082 seconds.
+  path: Assets/Images/Highlight/Gradient Left.png
+  artifactKey: Guid(593d94ea5fd8094469206d35cdc58683) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Images/Highlight/Gradient Left.png using Guid(593d94ea5fd8094469206d35cdc58683) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '97cf1743a372863da18995831ec7ff5d') in 0.021006 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000071 seconds.
+  path: Assets/Images/Highlight/Gradient Right.png
+  artifactKey: Guid(da0259faccfb34f44aedc114439132e2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Images/Highlight/Gradient Right.png using Guid(da0259faccfb34f44aedc114439132e2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6834eba52b92b5cf029e4bfa8221515f') in 0.021643 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 6.967619 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_plant_00_A.prefab
+  artifactKey: Guid(24cddb7fb1fcebe46a1d28592526ef65) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_plant_00_A.prefab using Guid(24cddb7fb1fcebe46a1d28592526ef65) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3db4dca2e4c0cdfd4ec5d9965b461ac1') in 0.539991 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000037 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Bushes/Prefabs/Prefab_hazel_04_cluster.prefab
+  artifactKey: Guid(78353309364b04e479ef6f491292bdb3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Bushes/Prefabs/Prefab_hazel_04_cluster.prefab using Guid(78353309364b04e479ef6f491292bdb3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5defa5f5f3d1d3d4e10dfe3cca09f7b') in 0.114335 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Bushes/Prefabs/Prefab_hazel_02.prefab
+  artifactKey: Guid(612ae1f3da787b448ba37a75af4758d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Bushes/Prefabs/Prefab_hazel_02.prefab using Guid(612ae1f3da787b448ba37a75af4758d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4c5daa6deedbcbae10004c9d16278117') in 0.064071 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000043 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_11_special.prefab
+  artifactKey: Guid(ccdbd07b15637834996fea79f25e9911) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_11_special.prefab using Guid(ccdbd07b15637834996fea79f25e9911) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ff95839f7790e135cdd12b2a3fa68d6f') in 0.436272 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000072 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_tree_00_A.prefab
+  artifactKey: Guid(b350a17bb70b9bf42837ff0e5a2296e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_tree_00_A.prefab using Guid(b350a17bb70b9bf42837ff0e5a2296e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1eabd65f074cd4144156dc459446d021') in 0.153714 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000143 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_tree_00_C.prefab
+  artifactKey: Guid(01bfe06c2ad059848918daf1ebfc775c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_tree_00_C.prefab using Guid(01bfe06c2ad059848918daf1ebfc775c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '540aedd7b293a8642c3802399f87668a') in 0.167004 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000053 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_plant_05.prefab
+  artifactKey: Guid(02b592172220ab54192a5bd2f640fe85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_plant_05.prefab using Guid(02b592172220ab54192a5bd2f640fe85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4f7dc79505b6057212a57b6197e0a07e') in 0.133675 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000042 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_02.prefab
+  artifactKey: Guid(db7dfcfcf1eaa5c4cb14e71bcf24d0a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_02.prefab using Guid(db7dfcfcf1eaa5c4cb14e71bcf24d0a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cf0a2796c0bbf966daa19d5e7b419216') in 0.160403 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000084 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_08.prefab
+  artifactKey: Guid(39a2bb4d7e48dd348a660ea4f396c14d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_08.prefab using Guid(39a2bb4d7e48dd348a660ea4f396c14d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1697e67f342a1b1d0dd2c7cf91d958e5') in 0.259607 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000047 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Bushes/Prefabs/Prefab_hazel_03.prefab
+  artifactKey: Guid(31d9d8524ff92954e93035af38b9cce7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Bushes/Prefabs/Prefab_hazel_03.prefab using Guid(31d9d8524ff92954e93035af38b9cce7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ca4bf077a9924992682222f8d3f12360') in 0.026974 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000041 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_04.prefab
+  artifactKey: Guid(da116b37074c1b348a73bf96fdce475a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_04.prefab using Guid(da116b37074c1b348a73bf96fdce475a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '973107ec98f70b17da873b84c45d4b81') in 0.180827 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000050 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_10_dead.prefab
+  artifactKey: Guid(ce9449b31aa1140499eb0ac84dd87596) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Pine_trees/Prefabs/Prefab_Forest_pine_10_dead.prefab using Guid(ce9449b31aa1140499eb0ac84dd87596) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '897b925591df6767490bda88e8b2bbd5') in 0.205656 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Prefabs/Prefab_rhododendron_02.prefab
+  artifactKey: Guid(205acd22d070337489b460f2dca66c81) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Prefabs/Prefab_rhododendron_02.prefab using Guid(205acd22d070337489b460f2dca66c81) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5d326040395d1e1d5748112cc5c80f96') in 0.117458 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 18.143929 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_01_1_Unity_Terrain.prefab
+  artifactKey: Guid(4bb65f4c0d380234a8f9befae35f79f3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_01_1_Unity_Terrain.prefab using Guid(4bb65f4c0d380234a8f9befae35f79f3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e8f615fa6b52491209aed98d81858324') in 0.132739 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_01_3_Unity_Terrain.prefab
+  artifactKey: Guid(72b37a68f8fda794cb1e60464cd6ff95) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_01_3_Unity_Terrain.prefab using Guid(72b37a68f8fda794cb1e60464cd6ff95) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3fa25d7056d6097fefc269937d02214b') in 0.030465 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000064 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_02_A_2_Unity_Terrain.prefab
+  artifactKey: Guid(09d3d9e68178adb4fa7d1179d8ec8627) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_02_A_2_Unity_Terrain.prefab using Guid(09d3d9e68178adb4fa7d1179d8ec8627) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6ba1f77e611dfddcaaa1575d4a927bd5') in 0.078291 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000039 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_heath_A_03_Unity_Terrain.prefab
+  artifactKey: Guid(a754b91ade7344f4e9c9723c9d6fb9f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_heath_A_03_Unity_Terrain.prefab using Guid(a754b91ade7344f4e9c9723c9d6fb9f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '099a19ca2bc5426a3cebbb27ce9ba0c6') in 0.101640 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000063 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_02_B_1_Unity_Terrain.prefab
+  artifactKey: Guid(57bc7551067a26747bd3dcddde74af2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_02_B_1_Unity_Terrain.prefab using Guid(57bc7551067a26747bd3dcddde74af2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '80b25c1af49028d45b5db3e60f710ea8') in 0.043790 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_01_4_Unity_Terrain.prefab
+  artifactKey: Guid(fbe39b9a0b01e5c46b6897b39b6451a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_grass_01_4_Unity_Terrain.prefab using Guid(fbe39b9a0b01e5c46b6897b39b6451a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '95b8f0ceb27155bfaa2f973047713dec') in 0.043233 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_heath_A_01_Unity_Terrain.prefab
+  artifactKey: Guid(f248826ebbea91c4cb490192f77267e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Unity Terrain Prefabs/Prefab_heath_A_01_Unity_Terrain.prefab using Guid(f248826ebbea91c4cb490192f77267e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '881d495b03271d61ebdeb32805f0777a') in 0.035196 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 93.969975 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_01_4.fbx
+  artifactKey: Guid(c01eb8e70e5a9b54092efcb0039cefb5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_01_4.fbx using Guid(c01eb8e70e5a9b54092efcb0039cefb5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '275231a1d85cc90519cb62bd787f9ca8') in 0.042111 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000031 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_A_3.fbx
+  artifactKey: Guid(ada77ab3f8c04af4f83b82298a7e53e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_A_3.fbx using Guid(ada77ab3f8c04af4f83b82298a7e53e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9192cd27e14c709bb82c5428e76e4f1a') in 0.036679 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000049 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_A_4.fbx
+  artifactKey: Guid(d6c856bd61b71f642af1e97a6907883b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_A_4.fbx using Guid(d6c856bd61b71f642af1e97a6907883b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bcffbc41246097f6fcfc512880ac61c9') in 0.045324 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 6.623693 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_A_5.fbx
+  artifactKey: Guid(6c8a5602dee9a9146ba438b0ea959ad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_A_5.fbx using Guid(6c8a5602dee9a9146ba438b0ea959ad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '04e79f70be63ea0acd348a71f4e3f53c') in 0.034807 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.025604 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_B_1.fbx
+  artifactKey: Guid(bc92ba9fbd5badf4cb5f3d17ecf2216d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_B_1.fbx using Guid(bc92ba9fbd5badf4cb5f3d17ecf2216d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3df6fb3cb340ba787ad0fa3cd69fc083') in 0.058565 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 7.750126 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_B_2.fbx
+  artifactKey: Guid(95a0f8fcb0093a54ca95e2dae43ab0c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_B_2.fbx using Guid(95a0f8fcb0093a54ca95e2dae43ab0c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4e1370a9902cd75c68e58b3a1bd7729d') in 0.058506 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.046005 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_B_4.fbx
+  artifactKey: Guid(4aa52b79c5a29c14dae41262ae3b3529) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_B_4.fbx using Guid(4aa52b79c5a29c14dae41262ae3b3529) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f203d5829b331aec6d5e60e102cc61b') in 0.036067 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.832451 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_C_1.fbx
+  artifactKey: Guid(fcbc735bd1d5997488d3f25c3394110f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_C_1.fbx using Guid(fcbc735bd1d5997488d3f25c3394110f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc1e9a75ae2c0b95d00bec791aedf52e') in 0.033674 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.048482 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_C_3.fbx
+  artifactKey: Guid(3fd719a05fb397a44851d83acc1ca84f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_02_C_3.fbx using Guid(3fd719a05fb397a44851d83acc1ca84f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '39abcf2711061d8357eec621981dcc06') in 0.033788 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.288032 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_A_1.fbx
+  artifactKey: Guid(29158e8e7a38c75479ab24bf1d894ed8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_A_1.fbx using Guid(29158e8e7a38c75479ab24bf1d894ed8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '50958b478b943ea31243e1111f46eb1e') in 0.050149 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.033147 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_B_1.fbx
+  artifactKey: Guid(0938cf8660241a844aa67dbfa72b5f3f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_B_1.fbx using Guid(0938cf8660241a844aa67dbfa72b5f3f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '13ae41cefb29b5153f3612ee4f0c571f') in 0.055716 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.556530 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_B_2.fbx
+  artifactKey: Guid(dacde63bbaa575f47b44c0df9048cbc3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_B_2.fbx using Guid(dacde63bbaa575f47b44c0df9048cbc3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '52ef9c3190069d8611f494e9810e6b16') in 0.048112 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.289534 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_C_1.fbx
+  artifactKey: Guid(8e18d3d506029a94e98cd02b4b4f45f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/grass_03_C_1.fbx using Guid(8e18d3d506029a94e98cd02b4b4f45f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3cea94a6e0e6dde6b6517aff034fd554') in 0.052526 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.031629 seconds.
+  path: Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/Materials/M_grass_01.mat
+  artifactKey: Guid(26c5d53c091a75a4b8f17e296ab47b01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Imported/NatureManufacture Assets/Mountain Environment/Foliage and Grass/Models/Materials/M_grass_01.mat using Guid(26c5d53c091a75a4b8f17e296ab47b01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e488a9d75d177aac3f279867ed1d149f') in 0.044248 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 83.577117 seconds.
+  path: Assets/PostProcessing/Volume Profiles
+  artifactKey: Guid(5a92ce86c5f0b2a4e846efee5ac438b7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/Volume Profiles using Guid(5a92ce86c5f0b2a4e846efee5ac438b7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8a4e2b9ebccbda9cedd8bf866ed115fa') in 0.003985 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 6.756617 seconds.
+  path: Assets/PostProcessing/Volumeprofiles
+  artifactKey: Guid(5a92ce86c5f0b2a4e846efee5ac438b7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/PostProcessing/Volumeprofiles using Guid(5a92ce86c5f0b2a4e846efee5ac438b7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c0bcdb9b6b9b29ed1e91a2edbb538239') in 0.004027 seconds 
