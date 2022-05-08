@@ -47,7 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>2.0.14</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorVersion>2.0.15</UnityProjectGeneratorVersion>
     <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2022.1.0b16</UnityVersion>
@@ -85,8 +85,8 @@
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Material\ShaderGraph\Nodes\CustomPassNodes.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Material\UIBlocks\LayerListUIBlock.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\PostProcessing\LiftGammaGainEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Material\ShaderGraph\Slots\DiffusionProfileInputMaterialSlot.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\Settings\SerializedScalableSetting.cs" />
+    <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Material\ShaderGraph\Slots\DiffusionProfileInputMaterialSlot.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\Settings\DiffusionProfileSettingsListUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Sky\VisualEnvironmentEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\CustomPass\CustomPassVolumeGizmoDrawer.cs" />
@@ -134,8 +134,8 @@
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Material\Fabric\ShaderGraph\FabricSubTarget.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\VFXGraph\Outputs\VFXDistortionQuadStripOutput.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\HDAssetFactory.cs" />
-    <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\HDRenderPipelineGlobalSettingsCreator.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Lighting\Reflection\CameraSettingsUI.Drawers.cs" />
+    <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\HDRenderPipelineGlobalSettingsCreator.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\Camera\HDCameraUI.Rendering.Skin.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\Core\TextureCombiner\TextureCombiner.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.high-definition@13.1.7\Editor\RenderPipeline\Settings\EditorDefaultSettings.cs" />
@@ -763,17 +763,8 @@
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>D:\Unity\Unity Hub\2022.1.0b16\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.Unsafe.dll</HintPath>
@@ -781,8 +772,11 @@
     <Reference Include="Unity.Burst.Cecil.Mdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualScripting.TextureAssets">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Pdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
@@ -790,14 +784,11 @@
     <Reference Include="Unity.Burst.Cecil">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="log4netPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="ReportGeneratorMerged">
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.1.1\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>

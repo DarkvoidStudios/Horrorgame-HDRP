@@ -186,7 +186,7 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0.036605656}
+    m_Value: {x: 1, y: 1, z: 1, w: 0.0026497974}
   gamma:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: -0.11647254}
@@ -214,7 +214,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.8
   directLightingStrength:
     m_OverrideState: 0
     m_Value: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
     m_Value: -0.46
   contrast:
     m_OverrideState: 1
-    m_Value: -4
+    m_Value: 5
   colorFilter:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -317,6 +317,9 @@ MonoBehaviour:
     m_Value: 1
   enabled:
     m_OverrideState: 1
+    m_Value: 1
+  enabledTransparent:
+    m_OverrideState: 0
     m_Value: 1
   tracing:
     m_OverrideState: 0

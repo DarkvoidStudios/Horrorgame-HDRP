@@ -47,7 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>2.0.14</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorVersion>2.0.15</UnityProjectGeneratorVersion>
     <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2022.1.0b16</UnityVersion>
@@ -151,8 +151,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\GraphData.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Math\Wave\TriangleWaveNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Artistic\Filter\FadeTransitionNode.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Math\Trigonometry\HyperbolicCosineNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Input\Lighting\BakedGINode.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Math\Trigonometry\HyperbolicCosineNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\Controls\ChannelEnumControl.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Input\Geometry\VertexColorNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Artistic\Blend\BlendNode.cs" />
@@ -320,8 +320,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Generation\Targets\PreviewTarget.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\Views\Slots\Texture3DSlotControlView.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Input\Texture\SampleCubemapNode.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\SerializableTexture.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Utility\PreviewNode.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\SerializableTexture.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\MatrixShaderProperty.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\Inspector\PropertyDrawers\GradientPropertyDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\MaterialEditor\ShaderGraphPropertyDrawers.cs" />
@@ -488,8 +488,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Input\Scene\EyeIndexNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\Inspector\PropertyDrawers\Vector3PropertyDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Importers\ShaderGraphImporter.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Math\Vector\TransformNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\Colors\IColorProvider.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Math\Vector\TransformNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\AssetCallbacks\CreateShaderSubGraph.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\GroupData.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Input\Texture\ProceduralVirtualTextureNode.cs" />
@@ -655,8 +655,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Nodes\Utility\Logic\NandNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Attributes\NeverAllowedByTargetAttribute.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Legacy\SlotReference0.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\Vector1MaterialSlot.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Drawing\ViewModels\InspectorViewModel.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Graphs\Vector1MaterialSlot.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Generation\Descriptors\PragmaDescriptor.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\Data\Legacy\SpriteUnlitMasterNode1.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@13.1.7\Editor\ShaderGraphProjectSettings.cs" />
@@ -1080,17 +1080,8 @@
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>D:\Unity\Unity Hub\2022.1.0b16\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.Unsafe.dll</HintPath>
@@ -1098,8 +1089,11 @@
     <Reference Include="Unity.Burst.Cecil.Mdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualScripting.TextureAssets">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Pdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
@@ -1107,14 +1101,11 @@
     <Reference Include="Unity.Burst.Cecil">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="log4netPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.15\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.6\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.7\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="ReportGeneratorMerged">
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.1.1\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>

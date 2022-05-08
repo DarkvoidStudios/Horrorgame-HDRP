@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Burst", "Unity.Burst.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.rlabrecque.steamworks.net", "com.rlabrecque.steamworks.net.csproj", "{E430853B-FB6E-7ACC-1DBA-6C07B24C127B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Polybrush", "Unity.Polybrush.csproj", "{EC780A67-B82E-3427-AEAA-DB43C381CCB0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Timeline", "Unity.Timeline.csproj", "{79111CC5-E2F9-D9D0-6B64-B7C7F057B906}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Mathematics", "Unity.Mathematics.csproj", "{BAFAEB2E-415D-B3B8-5E25-910838DE9DDE}"
@@ -38,8 +40,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Core.ShaderLibrary", "Unity.RenderPipelines.Core.ShaderLibrary.csproj", "{D9BD79D3-0819-2301-DBF4-D2F56BD288F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.HighDefinition.Config.Runtime", "Unity.RenderPipelines.HighDefinition.Config.Runtime.csproj", "{E6DF58F5-06FC-ADDE-67B5-34AC03DE2981}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Polybrush", "Unity.Polybrush.csproj", "{EC780A67-B82E-3427-AEAA-DB43C381CCB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VisualScripting.Core.Editor", "Unity.VisualScripting.Core.Editor.csproj", "{4B35430D-1E12-B38D-18BD-788A10B2AA95}"
 EndProject
@@ -60,6 +60,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.TestTools.CodeCoverage.Editor", "Unity.TestTools.CodeCoverage.Editor.csproj", "{876F0EC2-58B5-59C9-D839-CE28E8863BFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VisualScripting.Flow.Editor", "Unity.VisualScripting.Flow.Editor.csproj", "{B8EB39B3-E09B-7568-785D-2BE3B02AF571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Polybrush.Editor", "Unity.Polybrush.Editor.csproj", "{D230A48F-BE9B-265C-F719-C74023DFDEEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Rider.Editor", "Unity.Rider.Editor.csproj", "{5EEACB44-5DA6-8779-986A-A6BBA145F754}"
 EndProject
@@ -100,8 +102,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VisualScripting.Shared.Editor", "Unity.VisualScripting.Shared.Editor.csproj", "{F62D1253-4586-49BD-8495-924B91318AA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{F757C088-3882-61D9-7006-E6D7CFE07382}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Polybrush.Editor", "Unity.Polybrush.Editor.csproj", "{D230A48F-BE9B-265C-F719-C74023DFDEEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +153,10 @@ Global
 		{E430853B-FB6E-7ACC-1DBA-6C07B24C127B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E430853B-FB6E-7ACC-1DBA-6C07B24C127B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E430853B-FB6E-7ACC-1DBA-6C07B24C127B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79111CC5-E2F9-D9D0-6B64-B7C7F057B906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79111CC5-E2F9-D9D0-6B64-B7C7F057B906}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79111CC5-E2F9-D9D0-6B64-B7C7F057B906}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -185,10 +189,6 @@ Global
 		{E6DF58F5-06FC-ADDE-67B5-34AC03DE2981}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6DF58F5-06FC-ADDE-67B5-34AC03DE2981}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6DF58F5-06FC-ADDE-67B5-34AC03DE2981}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC780A67-B82E-3427-AEAA-DB43C381CCB0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4B35430D-1E12-B38D-18BD-788A10B2AA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4B35430D-1E12-B38D-18BD-788A10B2AA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B35430D-1E12-B38D-18BD-788A10B2AA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -229,6 +229,10 @@ Global
 		{B8EB39B3-E09B-7568-785D-2BE3B02AF571}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8EB39B3-E09B-7568-785D-2BE3B02AF571}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8EB39B3-E09B-7568-785D-2BE3B02AF571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5EEACB44-5DA6-8779-986A-A6BBA145F754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5EEACB44-5DA6-8779-986A-A6BBA145F754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EEACB44-5DA6-8779-986A-A6BBA145F754}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -309,10 +313,6 @@ Global
 		{F757C088-3882-61D9-7006-E6D7CFE07382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F757C088-3882-61D9-7006-E6D7CFE07382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F757C088-3882-61D9-7006-E6D7CFE07382}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D230A48F-BE9B-265C-F719-C74023DFDEEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
