@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\UI\Events\TimedEvent.cs" />
     <Compile Include="Assets\Scripts\UI\UI Manager\Slider\VolumeSlider.cs" />
     <Compile Include="Assets\Scripts\Controller\Intro\UIIntroController.cs" />
+    <Compile Include="Assets\KeyboardMovement.cs" />
     <Compile Include="Assets\Scripts\Sounds\HoverAndClickSoundcontroller.cs" />
     <Compile Include="Assets\Scripts\MapReferrings\Object Rotations\RotateObject.cs" />
     <Compile Include="Assets\Imported\PathCreator\Examples\Scripts\GeneratePathExample.cs" />
