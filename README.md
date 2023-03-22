@@ -1,4 +1,12 @@
 # Horrorgame-HDRP
-This is not the first game I have developed, but this game is still in development. This means that there is no full version yet and therefore bugs can occur. Right now, my main priority for the game is to make sure that players can set their preferences correctly. I also put a lot of emphasis on the UI and therefore usability. For more information, I have also linked a "Trello Page" to share my project plans.
+Welcome to Horrorgame-HDRP! This is a game that I am currently developing, and while it is not yet in its final version, I am working hard to make sure it meets the highest standards of quality and playability. As with any game in development, there may be bugs or issues that arise, but I am actively working to address these and ensure the best possible gaming experience for all players.
 
-Game Plans: Reworking the board Server Plans: https://trello.com/b/eqZG5Bp8/server-infrastructure
+My main focus right now is on enabling players to easily set their preferences and enjoy the game to its fullest. I have also placed a great deal of emphasis on creating an intuitive user interface that is easy to navigate and provides a seamless gaming experience.
+
+For more information on the game and my plans for its development, please visit my Trello page, which I have linked below. Here, you can find detailed information on my project plans, as well as updates on the latest developments in the game.
+
+Game Plans:
+https://trello.com/b/eqZG5Bp8/server-infrastructure
+
+Please visit my Trello page for updates on server infrastructure
+Thank you for your interest in Horrorgame-HDRP, and I look forward to sharing more updates with you soon!
