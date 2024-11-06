@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "b0844df8-e6ee-04f3-23fd-5cf408ecf16d": {
+      "ProjectGuid": "b0844df8-e6ee-04f3-23fd-5cf408ecf16d",
+      "DisplayName": "Unity.RenderPipelines.Core.Editor",
+      "ColorIndex": 0
+    },
+    "5482d349-7793-686a-c253-62ed109c4b15": {
+      "ProjectGuid": "5482d349-7793-686a-c253-62ed109c4b15",
+      "DisplayName": "Assembly-CSharp",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}

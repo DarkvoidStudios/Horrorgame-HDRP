@@ -1,0 +1,7 @@
+# General
+Library/
+Temp/
+Logs/
+
+# Big asset files
+Assets/Imported/NatureManufacture Assets/Mountain Environment/
